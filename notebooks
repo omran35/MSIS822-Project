@@ -1,0 +1,209 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOdnGUzYe8LU2OmSp+HeIeB",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/omran35/MSIS822-Project/blob/main/notebooks\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(\"=========================================\")\n",
+        "print(\"1. هيكل البيانات (Data Structure)\")\n",
+        "print(\"=========================================\")\n",
+        "df.info()\n",
+        "\n",
+        "print(\"\\n=========================================\")\n",
+        "print(\"2. توزيع المتغير المستهدف (Target Variable)\")\n",
+        "print(\"=========================================\")\n",
+        "human_texts = len(df)\n",
+        "ai_texts = len(df) * 4 # 4 نماذج ذكاء اصطناعي لكل نص بشري\n",
+        "\n",
+        "print(f\"👤 نصوص بشرية (Human): {human_texts}\")\n",
+        "print(f\"🤖 نصوص ذكاء اصطناعي (AI): {ai_texts}\")\n",
+        "\n",
+        "print(\"\\n=========================================\")\n",
+        "print(\"3. جودة البيانات (Data Quality)\")\n",
+        "print(\"=========================================\")\n",
+        "print(\"القيم المفقودة:\")\n",
+        "print(df.isnull().sum())\n",
+        "\n",
+        "print(f\"\\nالصفوف المكررة: {df.duplicated().sum()}\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Dga1-4wTmdZT",
+        "outputId": "9d153cae-e159-42e7-8221-5136163b33fb"
+      },
+      "execution_count": 29,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "=========================================\n",
+            "1. هيكل البيانات (Data Structure)\n",
+            "=========================================\n",
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 8388 entries, 0 to 8387\n",
+            "Data columns (total 5 columns):\n",
+            " #   Column                     Non-Null Count  Dtype \n",
+            "---  ------                     --------------  ----- \n",
+            " 0   original_abstract          8388 non-null   object\n",
+            " 1   allam_generated_abstract   8388 non-null   object\n",
+            " 2   jais_generated_abstract    8388 non-null   object\n",
+            " 3   llama_generated_abstract   8388 non-null   object\n",
+            " 4   openai_generated_abstract  8388 non-null   object\n",
+            "dtypes: object(5)\n",
+            "memory usage: 327.8+ KB\n",
+            "\n",
+            "=========================================\n",
+            "2. توزيع المتغير المستهدف (Target Variable)\n",
+            "=========================================\n",
+            "👤 نصوص بشرية (Human): 8388\n",
+            "🤖 نصوص ذكاء اصطناعي (AI): 33552\n",
+            "\n",
+            "=========================================\n",
+            "3. جودة البيانات (Data Quality)\n",
+            "=========================================\n",
+            "القيم المفقودة:\n",
+            "original_abstract            0\n",
+            "allam_generated_abstract     0\n",
+            "jais_generated_abstract      0\n",
+            "llama_generated_abstract     0\n",
+            "openai_generated_abstract    0\n",
+            "dtype: int64\n",
+            "\n",
+            "الصفوف المكررة: 0\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "dfs = []\n",
+        "for split_name in dataset.keys():\n",
+        "    temp_df = pd.DataFrame(dataset[split_name])\n",
+        "    dfs.append(temp_df)\n",
+        "\n",
+        "# دمجها في متغير واحد اسمه df\n",
+        "df = pd.concat(dfs, ignore_index=True)\n",
+        "\n",
+        "print(f\"✅ تم جلب البيانات بنجاح! إجمالي العدد هو: {len(df)}\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "G20l8gvgmaPa",
+        "outputId": "1f65ecbd-079c-4afe-80da-073308a3c1c9"
+      },
+      "execution_count": 28,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "✅ تم جلب البيانات بنجاح! إجمالي العدد هو: 8388\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "dataset = load_dataset(\"KFUPM-JRCAI/arabic-generated-abstracts\")"
+      ],
+      "metadata": {
+        "id": "g_L6A_QTmWee"
+      },
+      "execution_count": 27,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install datasets pandas\n",
+        "from datasets import load_dataset\n",
+        "import pandas as pd"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Hhp9ATdlmPza",
+        "outputId": "14d7ae77-e8fc-41c9-ca7c-88a29ea2c806"
+      },
+      "execution_count": 26,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: datasets in /usr/local/lib/python3.13/dist-packages (4.8.5)\n",
+            "Requirement already satisfied: pandas in /usr/local/lib/python3.13/dist-packages (2.2.3)\n",
+            "Requirement already satisfied: filelock in /usr/local/lib/python3.13/dist-packages (from datasets) (3.32.5)\n",
+            "Requirement already satisfied: numpy>=1.17 in /usr/local/lib/python3.13/dist-packages (from datasets) (2.1.3)\n",
+            "Requirement already satisfied: pyarrow>=21.0.0 in /usr/local/lib/python3.13/dist-packages (from datasets) (23.0.1)\n",
+            "Requirement already satisfied: dill<0.4.2,>=0.3.0 in /usr/local/lib/python3.13/dist-packages (from datasets) (0.4.1)\n",
+            "Requirement already satisfied: requests>=2.32.2 in /usr/local/lib/python3.13/dist-packages (from datasets) (2.32.4)\n",
+            "Requirement already satisfied: httpx<1.0.0 in /usr/local/lib/python3.13/dist-packages (from datasets) (0.28.1)\n",
+            "Requirement already satisfied: tqdm>=4.66.3 in /usr/local/lib/python3.13/dist-packages (from datasets) (4.67.3)\n",
+            "Requirement already satisfied: xxhash in /usr/local/lib/python3.13/dist-packages (from datasets) (4.0.1)\n",
+            "Requirement already satisfied: multiprocess<0.70.20 in /usr/local/lib/python3.13/dist-packages (from datasets) (0.70.19)\n",
+            "Requirement already satisfied: fsspec<=2026.2.0,>=2023.1.0 in /usr/local/lib/python3.13/dist-packages (from fsspec[http]<=2026.2.0,>=2023.1.0->datasets) (2025.12.0)\n",
+            "Requirement already satisfied: huggingface-hub<2.0,>=0.25.0 in /usr/local/lib/python3.13/dist-packages (from datasets) (1.29.0)\n",
+            "Requirement already satisfied: packaging in /usr/local/lib/python3.13/dist-packages (from datasets) (26.3)\n",
+            "Requirement already satisfied: pyyaml>=5.1 in /usr/local/lib/python3.13/dist-packages (from datasets) (6.0.3)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.13/dist-packages (from pandas) (2.9.0.post0)\n",
+            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.13/dist-packages (from pandas) (2025.2)\n",
+            "Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.13/dist-packages (from pandas) (2026.3)\n",
+            "Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in /usr/local/lib/python3.13/dist-packages (from fsspec[http]<=2026.2.0,>=2023.1.0->datasets) (3.14.3)\n",
+            "Requirement already satisfied: anyio in /usr/local/lib/python3.13/dist-packages (from httpx<1.0.0->datasets) (4.14.2)\n",
+            "Requirement already satisfied: certifi in /usr/local/lib/python3.13/dist-packages (from httpx<1.0.0->datasets) (2026.7.22)\n",
+            "Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.13/dist-packages (from httpx<1.0.0->datasets) (1.0.9)\n",
+            "Requirement already satisfied: idna in /usr/local/lib/python3.13/dist-packages (from httpx<1.0.0->datasets) (3.19)\n",
+            "Requirement already satisfied: h11>=0.16 in /usr/local/lib/python3.13/dist-packages (from httpcore==1.*->httpx<1.0.0->datasets) (0.16.0)\n",
+            "Requirement already satisfied: click<9.0.0,>=8.4.2 in /usr/local/lib/python3.13/dist-packages (from huggingface-hub<2.0,>=0.25.0->datasets) (8.5.0)\n",
+            "Requirement already satisfied: hf-xet<2.0.0,>=1.5.2 in /usr/local/lib/python3.13/dist-packages (from huggingface-hub<2.0,>=0.25.0->datasets) (1.6.0)\n",
+            "Requirement already satisfied: typing-extensions>=4.1.0 in /usr/local/lib/python3.13/dist-packages (from huggingface-hub<2.0,>=0.25.0->datasets) (4.16.0)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.13/dist-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)\n",
+            "Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.13/dist-packages (from requests>=2.32.2->datasets) (3.4.9)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.13/dist-packages (from requests>=2.32.2->datasets) (2.5.0)\n",
+            "Requirement already satisfied: aiohappyeyeballs>=2.5.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets) (2.7.1)\n",
+            "Requirement already satisfied: aiosignal>=1.4.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets) (1.4.0)\n",
+            "Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets) (26.1.0)\n",
+            "Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets) (1.8.0)\n",
+            "Requirement already satisfied: multidict<7.0,>=4.5 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets) (6.7.1)\n",
+            "Requirement already satisfied: propcache>=0.2.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets) (0.5.2)\n",
+            "Requirement already satisfied: yarl<2.0,>=1.17.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2026.2.0,>=2023.1.0->datasets) (1.24.5)\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
